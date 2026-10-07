@@ -8,7 +8,7 @@ detections, history and trends, alerts, and device settings.
 
 It talks only to `mosqai-backend` and never to a device directly.
 
-Primary owner: Developer 1. Visual reference: the MosqAI Shield Figma design.
+Owner: `@MosqAI/core` team (RavynX0, Hope664). Visual reference: the MosqAI Shield Figma design.
 
 ## Technology
 
