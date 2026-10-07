@@ -43,4 +43,4 @@ EAS Build for Android/iOS, with separate dev, staging and production profiles.
 
 Branch from `develop` (`feature/…`, `fix/…`, `refactor/…`), use Conventional
 Commits, open a PR into `develop`, one approval. Full rules:
-[mosqai-docs/workflow.md](https://github.com/MosqAI-Shield/mosqai-docs/blob/develop/workflow.md).
+[mosqai-docs/workflow.md](https://github.com/MosqAI/mosqai-docs/blob/develop/workflow.md).
