@@ -16,6 +16,9 @@ const en = {
     noEarlier: 'No earlier data',
     unknownDay: 'Hollow dots: no data that day (the trap was not reporting)',
     comingSoon: 'Coming soon',
+    ok: 'OK',
+    underDevTitle: 'Still under development',
+    underDevText: 'This feature is still under development. For now, please operate your trap manually using its own switch.',
   },
   auth: {
     tagline: 'Smarter Monitoring. Healthier Communities.',
@@ -158,6 +161,8 @@ const en = {
     awaiting: 'Awaiting AI analysis',
     analysing: 'Analysing…',
     viewAnalysis: 'View Analysis',
+    counted: '{count} mosquito(es) counted',
+    speciesSoon: 'Species identification is still under development.',
   },
   analysis: {
     title: 'Analysis Result',

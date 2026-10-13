@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { CaptureThumb, RiskBadge, useSpeciesName } from '@/components/species';
 import { Button, Card, ErrorState, Header, Loading, Screen, text } from '@/components/ui';
 import { fmt, useI18n } from '@/i18n';
@@ -41,14 +41,20 @@ export default function CaptureDetailScreen() {
         <ErrorState error={error} onRetry={refetch} />
       ) : (
         <>
-          <View style={styles.photo}>
-            <CaptureThumb species={analysis?.species ?? null} size={110} />
-            <Text style={text.faint}>{t.captures.previewSoon}</Text>
-          </View>
+          {data.imageUrl ? (
+            <Image source={{ uri: data.imageUrl }} style={styles.image} resizeMode="cover" accessibilityIgnoresInvertColors />
+          ) : (
+            <View style={styles.photo}>
+              <CaptureThumb species={analysis?.species ?? null} size={110} />
+              <Text style={text.faint}>{t.captures.previewSoon}</Text>
+            </View>
+          )}
           <Card style={{ gap: space(4) }}>
             <Field label={t.captures.species}>
               <View style={styles.speciesRow}>
-                <Text style={styles.species}>{speciesName(analysis?.species ?? null)}</Text>
+                <Text style={styles.species}>
+                  {analysis && !analysis.species ? t.captures.speciesSoon : speciesName(analysis?.species ?? null)}
+                </Text>
                 <RiskBadge risk={analysis?.risk ?? null} />
               </View>
             </Field>
@@ -63,7 +69,11 @@ export default function CaptureDetailScreen() {
             </Field>
             <Field label={t.captures.analysis}>
               <Text style={styles.value}>
-                {analysis?.confidence != null ? fmt(t.captures.confidence, { value: Math.round(analysis.confidence * 100) }) : t.captures.notAnalysed}
+                {analysis?.confidence != null
+                  ? fmt(t.captures.confidence, { value: Math.round(analysis.confidence * 100) })
+                  : analysis
+                    ? fmt(t.captures.counted, { count: analysis.mosquitoes })
+                    : t.captures.notAnalysed}
               </Text>
             </Field>
           </Card>
@@ -74,6 +84,7 @@ export default function CaptureDetailScreen() {
 }
 
 const styles = StyleSheet.create({
+  image: { width: '100%', aspectRatio: 4 / 3, borderRadius: radius.lg, backgroundColor: colors.neutralSoft },
   photo: {
     alignItems: 'center',
     gap: space(3),

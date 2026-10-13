@@ -16,6 +16,9 @@ const fr: Dict = {
     noEarlier: 'Pas de données antérieures',
     unknownDay: 'Points vides : aucune donnée ce jour-là (le piège n’envoyait rien)',
     comingSoon: 'Bientôt disponible',
+    ok: 'OK',
+    underDevTitle: 'En cours de développement',
+    underDevText: "Cette fonctionnalité est encore en cours de développement. Pour l’instant, utilisez l’interrupteur de votre piège manuellement.",
   },
   auth: {
     tagline: 'Surveillance intelligente. Communautés en meilleure santé.',
@@ -158,6 +161,8 @@ const fr: Dict = {
     awaiting: "En attente d'analyse IA",
     analysing: 'Analyse…',
     viewAnalysis: "Voir l'analyse",
+    counted: '{count} moustique(s) compté(s)',
+    speciesSoon: "L’identification de l’espèce est encore en cours de développement.",
   },
   analysis: {
     title: "Résultat d'analyse",

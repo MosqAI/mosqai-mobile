@@ -75,6 +75,8 @@ export interface CaptureSummary {
   species: Species | null;
   risk: SpeciesRisk | null;
   confidence: number | null;
+  /** Total counted; set even when the model reports no species. null = not analysed. */
+  mosquitoes: number | null;
 }
 
 export interface CaptureDetail {
@@ -88,6 +90,7 @@ export interface CaptureDetail {
     species: Species | null;
     risk: SpeciesRisk | null;
     confidence: number | null;
+    mosquitoes: number;
     detections: { species: Species; confidence: number; bbox: number[] }[];
   } | null;
 }

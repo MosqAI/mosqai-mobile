@@ -41,18 +41,27 @@ export default function AnalysisScreen() {
             {analysis.species && <Text style={text.muted}>{t.species.note[analysis.species]}</Text>}
           </Card>
 
-          <Card style={{ gap: space(3) }}>
-            <View style={styles.row}>
-              <Text style={text.muted}>{t.analysis.confidence}</Text>
-              <Text style={styles.confidence}>{confidence}%</Text>
-            </View>
-            <View style={styles.track}>
-              <View style={[styles.fill, { width: `${confidence}%` }]} />
-            </View>
-            <Text style={text.faint}>
-              {fmt(t.analysis.model, { model: analysis.modelVersion, date: f.dateTime(analysis.analysedAt), count: analysis.detections.length })}
-            </Text>
-          </Card>
+          {analysis.species ? (
+            <Card style={{ gap: space(3) }}>
+              <View style={styles.row}>
+                <Text style={text.muted}>{t.analysis.confidence}</Text>
+                <Text style={styles.confidence}>{confidence}%</Text>
+              </View>
+              <View style={styles.track}>
+                <View style={[styles.fill, { width: `${confidence}%` }]} />
+              </View>
+              <Text style={text.faint}>
+                {fmt(t.analysis.model, { model: analysis.modelVersion, date: f.dateTime(analysis.analysedAt), count: analysis.detections.length })}
+              </Text>
+            </Card>
+            ) : (
+            // Count-only model: a total, no species or confidence yet
+            <Card style={{ gap: space(2) }}>
+              <Text style={styles.confidence}>{fmt(t.captures.counted, { count: analysis.mosquitoes })}</Text>
+              <Text style={text.muted}>{t.captures.speciesSoon}</Text>
+              <Text style={text.faint}>{fmt(t.analysis.model, { model: analysis.modelVersion, date: f.dateTime(analysis.analysedAt), count: analysis.mosquitoes })}</Text>
+            </Card>
+          )}
 
           {analysis.species && (
             <Card style={{ gap: space(3) }}>

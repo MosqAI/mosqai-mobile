@@ -3,10 +3,12 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Switch, Text, View } from 'react-native';
+import { useNotice } from '@/components/notice';
 import { PowerCard, ScheduleCard } from '@/components/power-schedule';
 import { Badge, Card, ErrorState, Header, Loading, Screen, text, type Tone } from '@/components/ui';
 import { fmt, useI18n } from '@/i18n';
 import type { Dict } from '@/i18n/en';
+import { HARDWARE_CONTROL } from '@/lib/features';
 import { deviceName } from '@/lib/format';
 import { useCommands, useDevice, useSendCommand } from '@/lib/queries';
 import { colors, fonts, radius, space, switchThumb } from '@/lib/theme';
@@ -54,6 +56,7 @@ export default function DeviceControlsScreen() {
   const device = useDevice(id);
   const commands = useCommands(id);
   const send = useSendCommand(id);
+  const { underDevelopment } = useNotice();
 
   const open = commands.data?.filter((c) => c.status === 'PENDING' || c.status === 'SENT') ?? [];
   const latestSettled = commands.data?.find((c) => !open.includes(c));
@@ -96,7 +99,8 @@ export default function DeviceControlsScreen() {
       ) : (
         <Switch
           value={value ?? false}
-          disabled={offline || !manual || value === null || send.isPending}
+          // Without remote control every tap opens the "under development" popup
+          disabled={HARDWARE_CONTROL && (offline || !manual || value === null || send.isPending)}
           onValueChange={(on) => send.mutate({ type, params: { on } })}
           trackColor={{ true: colors.brand, false: colors.border }}
           {...switchThumb}
@@ -119,10 +123,17 @@ export default function DeviceControlsScreen() {
         )}
       </Card>
 
+      {!HARDWARE_CONTROL && (
+        <Pressable onPress={underDevelopment} style={styles.devNotice} accessibilityRole="button">
+          <Icon name="tool" size={18} color={colors.warning} />
+          <Text style={[text.muted, { flex: 1 }]}>{t.common.underDevText}</Text>
+        </Pressable>
+      )}
+
       <PowerCard
         power={d.confirmedState.power}
         pending={pending('SET_POWER')}
-        disabled={offline || send.isPending}
+        disabled={HARDWARE_CONTROL && (offline || send.isPending)}
         onToggle={(on) => send.mutate({ type: 'SET_POWER', params: { on } })}
       />
 
@@ -134,8 +145,8 @@ export default function DeviceControlsScreen() {
             return (
               <Pressable
                 key={mode}
-                disabled={offline || active || pending('SET_MODE')}
-                onPress={() => send.mutate({ type: 'SET_MODE', params: { mode } })}
+                disabled={HARDWARE_CONTROL && (offline || active || pending('SET_MODE'))}
+                onPress={() => (HARDWARE_CONTROL ? send.mutate({ type: 'SET_MODE', params: { mode } }) : underDevelopment())}
                 style={[styles.segmentItem, active && styles.segmentActive]}
                 accessibilityRole="button"
                 accessibilityState={{ selected: active }}
@@ -197,6 +208,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     marginTop: space(2),
   },
+  devNotice: { flexDirection: 'row', gap: space(2), alignItems: 'center', backgroundColor: colors.warningSoft, padding: space(3), borderRadius: radius.md },
   segment: { flexDirection: 'row', backgroundColor: colors.neutralSoft, borderRadius: radius.pill, padding: 4 },
   segmentItem: { flex: 1, paddingVertical: space(2), alignItems: 'center', borderRadius: radius.pill },
   segmentActive: { backgroundColor: colors.brand },

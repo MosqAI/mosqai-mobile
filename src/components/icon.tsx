@@ -52,6 +52,7 @@ import {
   Wifi,
   WifiOff,
   Wind,
+  Wrench,
   X,
   type LucideIcon,
 } from 'lucide-react-native';
@@ -114,6 +115,7 @@ const ICONS = {
   wifi: Wifi,
   'wifi-off': WifiOff,
   wind: Wind,
+  tool: Wrench,
   x: X,
 } satisfies Record<string, LucideIcon>;
 

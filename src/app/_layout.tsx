@@ -7,6 +7,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NoticeProvider } from '@/components/notice';
 import { SplashView } from '@/components/splash';
 import { I18nProvider } from '@/i18n';
 import { AuthProvider, useAuth } from '@/lib/auth';
@@ -57,8 +58,10 @@ export default function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <I18nProvider>
-            <StatusBar style="dark" />
-            <RootNavigator />
+            <NoticeProvider>
+              <StatusBar style="dark" />
+              <RootNavigator />
+            </NoticeProvider>
           </I18nProvider>
         </AuthProvider>
       </QueryClientProvider>

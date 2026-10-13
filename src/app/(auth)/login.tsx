@@ -1,6 +1,7 @@
 import { Link } from 'expo-router';
+import { useNotice } from '@/components/notice';
 import { useState } from 'react';
-import { Alert, Pressable, StyleSheet, Text } from 'react-native';
+import { Pressable, StyleSheet, Text } from 'react-native';
 import { AuthShell } from '@/components/auth-shell';
 import { Button, Field } from '@/components/ui';
 import { useI18n } from '@/i18n';
@@ -10,6 +11,7 @@ import { colors, fonts } from '@/lib/theme';
 export default function LoginScreen() {
   const { signIn } = useAuth();
   const { t } = useI18n();
+  const notice = useNotice();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string>();
@@ -62,7 +64,7 @@ export default function LoginScreen() {
         accessibilityLabel="Password"
       />
       <Button title={t.auth.logIn} onPress={submit} loading={busy} />
-      <Pressable onPress={() => Alert.alert(t.auth.forgot, t.auth.forgotText)} style={styles.forgot} accessibilityRole="button">
+      <Pressable onPress={() => notice.show({ title: t.auth.forgot, message: t.auth.forgotText, icon: 'tool' })} style={styles.forgot} accessibilityRole="button">
         <Text style={styles.link}>{t.auth.forgot}</Text>
       </Pressable>
     </AuthShell>

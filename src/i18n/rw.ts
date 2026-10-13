@@ -17,6 +17,9 @@ const rw: Dict = {
     noEarlier: 'Nta makuru abanza',
     unknownDay: 'Utudomo turimo ubusa: nta makuru uwo munsi (umutego ntiwohereje)',
     comingSoon: 'Biraza vuba',
+    ok: 'Sawa',
+    underDevTitle: 'Biracyakorwaho',
+    underDevText: 'Iki gice kiracyakorwaho. Ubu, koresha umutego wawe n’intoki ukoresheje switch yawo.',
   },
   auth: {
     tagline: "Igenzura rikoresha ubwenge. Imiryango ifite ubuzima bwiza.",
@@ -159,6 +162,8 @@ const rw: Dict = {
     awaiting: 'Gitegereje isesengura rya AI',
     analysing: 'Kirasesengurwa…',
     viewAnalysis: 'Reba isesengura',
+    counted: 'Imibu {count} yabaruwe',
+    speciesSoon: 'Kumenya ubwoko bw’umubu biracyakorwaho.',
   },
   analysis: {
     title: "Ibyavuye mu isesengura",

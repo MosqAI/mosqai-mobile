@@ -8,6 +8,7 @@ import { fmt, useI18n } from '@/i18n';
 import { useAuth } from '@/lib/auth';
 import { deviceName, devicePlace } from '@/lib/format';
 import { nextRule } from '@/lib/schedule';
+import { HARDWARE_CONTROL } from '@/lib/features';
 import { useCommands, useDevices, useOverview, useSchedules, useSendCommand, useSetPowerAll } from '@/lib/queries';
 import { colors, fonts, radius, space, switchThumb } from '@/lib/theme';
 import type { Device } from '@/lib/types';
@@ -59,7 +60,7 @@ function TrapRow({ device, last }: { device: Device; last: boolean }) {
         ) : (
           <Switch
             value={power === true}
-            disabled={offline || power === null || send.isPending}
+            disabled={HARDWARE_CONTROL && (offline || power === null || send.isPending)}
             onValueChange={(on) => send.mutate({ type: 'SET_POWER', params: { on } })}
             trackColor={{ true: colors.brand, false: colors.border }}
             {...switchThumb}
@@ -119,7 +120,7 @@ export default function HomeScreen() {
             icon="power"
             label={powerAll.isPending ? (allOn ? h.turningOff : h.turningOn) : allOn ? h.allOff : h.allOn}
             busy={powerAll.isPending}
-            disabled={reachable.length === 0}
+            disabled={HARDWARE_CONTROL && reachable.length === 0}
             onPress={() => powerAll.mutate({ devices: list, on: !allOn })}
           />
           <QuickAction

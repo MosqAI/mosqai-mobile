@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNotice } from '@/components/notice';
 import { api } from './api';
+import { HARDWARE_CONTROL } from './features';
 import type { CaptureDetail, CaptureSummary, Command, Device, DeviceSync, Overview, ScheduleRule, SpeciesReport, User } from './types';
 
 export const useOverview = (days = 7) => useQuery({ queryKey: ['overview', days], queryFn: () => api<Overview>(`/me/overview?days=${days}`) });
@@ -30,11 +32,13 @@ export const useCommands = (deviceId: string) =>
 
 export function useSendCommand(deviceId: string) {
   const qc = useQueryClient();
-  return useMutation({
-    mutationFn: (input: { type: string; params: Record<string, unknown> }) =>
-      api<Command>(`/devices/${deviceId}/commands`, { method: 'POST', json: input }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['devices', deviceId, 'commands'] }),
-  });
+  return useHardwareGuard(
+    useMutation({
+      mutationFn: (input: { type: string; params: Record<string, unknown> }) =>
+        api<Command>(`/devices/${deviceId}/commands`, { method: 'POST', json: input }),
+      onSuccess: () => qc.invalidateQueries({ queryKey: ['devices', deviceId, 'commands'] }),
+    }),
+  );
 }
 
 export function useClaimDevice() {
@@ -85,16 +89,28 @@ export function useScheduleMutations(deviceId: string) {
  */
 export function useSetPowerAll() {
   const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async ({ devices, on }: { devices: Device[]; on: boolean }) => {
-      const targets = devices.filter((d) => d.status !== 'OFFLINE' && d.confirmedState.power !== on);
-      await Promise.all(targets.map((d) => api<Command>(`/devices/${d.id}/commands`, { method: 'POST', json: { type: 'SET_POWER', params: { on } } })));
-      return targets.map((d) => d.id);
-    },
-    onSuccess: (ids) => {
-      for (const id of ids) void qc.invalidateQueries({ queryKey: ['devices', id, 'commands'] });
-      // Devices confirm within a few seconds; refresh their confirmed state then.
-      setTimeout(() => void qc.invalidateQueries({ queryKey: ['devices'] }), 3000);
-    },
-  });
+  return useHardwareGuard(
+    useMutation({
+      mutationFn: async ({ devices, on }: { devices: Device[]; on: boolean }) => {
+        const targets = devices.filter((d) => d.status !== 'OFFLINE' && d.confirmedState.power !== on);
+        await Promise.all(targets.map((d) => api<Command>(`/devices/${d.id}/commands`, { method: 'POST', json: { type: 'SET_POWER', params: { on } } })));
+        return targets.map((d) => d.id);
+      },
+      onSuccess: (ids) => {
+        for (const id of ids) void qc.invalidateQueries({ queryKey: ['devices', id, 'commands'] });
+        // Devices confirm within a few seconds; refresh their confirmed state then.
+        setTimeout(() => void qc.invalidateQueries({ queryKey: ['devices'] }), 3000);
+      },
+    }),
+  );
+}
+
+/**
+ * While remote control is off (see HARDWARE_CONTROL), calling mutate() shows the
+ * "under development" popup instead of sending anything to the trap.
+ */
+function useHardwareGuard<M extends { mutate: (...args: never[]) => void }>(mutation: M): M {
+  const { underDevelopment } = useNotice();
+  if (HARDWARE_CONTROL) return mutation;
+  return { ...mutation, mutate: () => underDevelopment() };
 }

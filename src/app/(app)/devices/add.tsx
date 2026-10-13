@@ -1,7 +1,8 @@
 import { Icon } from '@/components/icon';
+import { useNotice } from '@/components/notice';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Button, Card, Field, Header, Screen, text } from '@/components/ui';
 import { useI18n } from '@/i18n';
 import { useClaimDevice } from '@/lib/queries';
@@ -13,6 +14,7 @@ import { colors, space } from '@/lib/theme';
  */
 export default function AddDeviceScreen() {
   const { t } = useI18n();
+  const notice = useNotice();
   const claim = useClaimDevice();
   const [manual, setManual] = useState(false);
   const [form, setForm] = useState({ deviceId: '', pairingCode: '', nickname: '', placement: '' });
@@ -35,7 +37,7 @@ export default function AddDeviceScreen() {
         header={<Header title={t.add.title} back />}
         footer={
           <>
-            <Button title={t.add.scan} icon="maximize" onPress={() => Alert.alert(t.add.scan, t.add.scanText)} />
+            <Button title={t.add.scan} icon="maximize" onPress={() => notice.show({ title: t.add.scan, message: t.add.scanText, icon: 'tool' })} />
             <Button title={t.add.manual} variant="secondary" onPress={() => setManual(true)} />
           </>
         }

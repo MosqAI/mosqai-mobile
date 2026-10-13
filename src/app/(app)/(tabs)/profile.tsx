@@ -1,5 +1,6 @@
 import { router } from 'expo-router';
-import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
+import { useNotice } from '@/components/notice';
+import { StyleSheet, Text, View } from 'react-native';
 import { LanguagePills } from '@/components/language-pills';
 import { Card, Header, Row, Screen, text } from '@/components/ui';
 import { fmt, useI18n } from '@/i18n';
@@ -9,15 +10,18 @@ import { colors, fonts, space } from '@/lib/theme';
 export default function ProfileScreen() {
   const { user, signOut } = useAuth();
   const { t } = useI18n();
+  const notice = useNotice();
 
-  const confirmSignOut = () => {
-    // Alert buttons are not supported on web.
-    if (Platform.OS === 'web') return void signOut();
-    Alert.alert(t.profile.logOutTitle, t.profile.logOutText, [
-      { text: t.common.cancel, style: 'cancel' },
-      { text: t.profile.logOut, style: 'destructive', onPress: () => void signOut() },
-    ]);
-  };
+  const confirmSignOut = () =>
+    notice.show({
+      title: t.profile.logOutTitle,
+      message: t.profile.logOutText,
+      icon: 'log-out',
+      actions: [
+        { label: t.common.cancel, variant: 'secondary' },
+        { label: t.profile.logOut, variant: 'danger', onPress: () => void signOut() },
+      ],
+    });
 
   const initials = (user?.name ?? '')
     .split(' ')
@@ -45,7 +49,7 @@ export default function ProfileScreen() {
 
       <Card style={{ padding: 0, overflow: 'hidden' }}>
         <Row icon="user" label={t.profile.personal} onPress={() => router.push('/profile/edit')} />
-        <Row icon="lock" label={t.profile.changePassword} onPress={() => Alert.alert(t.profile.changePassword, t.profile.changePasswordText)} />
+        <Row icon="lock" label={t.profile.changePassword} onPress={() => notice.show({ title: t.profile.changePassword, message: t.profile.changePasswordText, icon: 'tool' })} />
         <Row icon="bell" label={t.profile.notifications} onPress={() => router.push('/settings')} />
         <Row icon="help-circle" label={t.profile.help} onPress={() => router.push('/settings')} />
         <Row icon="log-out" label={t.profile.logOut} danger last onPress={confirmSignOut} />

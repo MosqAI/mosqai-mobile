@@ -3,7 +3,7 @@ import { Link, useLocalSearchParams } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { CaptureThumb, RiskBadge, useSpeciesName } from '@/components/species';
 import { Card, EmptyState, ErrorState, Header, Loading, Screen, text } from '@/components/ui';
-import { useI18n } from '@/i18n';
+import { fmt, useI18n } from '@/i18n';
 import { useCaptures } from '@/lib/queries';
 import { colors, fonts, space } from '@/lib/theme';
 
@@ -28,7 +28,10 @@ export default function CapturesScreen() {
               <Card style={styles.item}>
                 <CaptureThumb species={item.species} size={56} />
                 <View style={{ flex: 1, gap: space(1.5) }}>
-                  <Text style={styles.name}>{speciesName(item.species)}</Text>
+                  <Text style={styles.name}>
+                    {/* Count-only results have a total but no species yet */}
+                    {!item.species && item.mosquitoes !== null ? fmt(t.captures.counted, { count: item.mosquitoes }) : speciesName(item.species)}
+                  </Text>
                   <RiskBadge risk={item.risk} />
                   <Text style={text.faint}>{f.dateTime(item.capturedAt)}</Text>
                 </View>

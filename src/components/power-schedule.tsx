@@ -1,7 +1,9 @@
 import { Icon } from '@/components/icon';
 import { useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
+import { useNotice } from '@/components/notice';
 import { useI18n } from '@/i18n';
+import { HARDWARE_CONTROL } from '@/lib/features';
 import { useScheduleMutations, useSchedules } from '@/lib/queries';
 import { colors, fonts, radius, space, switchThumb } from '@/lib/theme';
 import type { Command, ScheduleRule } from '@/lib/types';
@@ -28,7 +30,7 @@ export function PowerCard({
     <Card style={styles.power}>
       <Pressable
         onPress={() => onToggle(!on)}
-        disabled={disabled || pending || power === null}
+        disabled={disabled || pending || (HARDWARE_CONTROL && power === null)}
         accessibilityRole="switch"
         accessibilityState={{ checked: on, disabled: disabled || pending, busy: pending }}
         accessibilityLabel={t.controls.power}
@@ -60,6 +62,9 @@ export function ScheduleCard({ deviceId, automatic, lastSync }: { deviceId: stri
   const c = t.controls;
   const schedules = useSchedules(deviceId);
   const m = useScheduleMutations(deviceId);
+  const { underDevelopment } = useNotice();
+  // Schedules only matter once the trap can be switched remotely
+  const guard = <A extends unknown[]>(fn: (...args: A) => void) => (HARDWARE_CONTROL ? fn : () => underDevelopment());
   const [adding, setAdding] = useState(false);
   const [action, setAction] = useState<'ON' | 'OFF'>('ON');
   const [time, setTime] = useState('18:00');
@@ -126,12 +131,12 @@ export function ScheduleCard({ deviceId, automatic, lastSync }: { deviceId: stri
             <Switch
               value={r.enabled}
               disabled={busy}
-              onValueChange={(enabled) => m.update.mutate({ id: r.id, enabled })}
+              onValueChange={guard((enabled: boolean) => m.update.mutate({ id: r.id, enabled }))}
               trackColor={{ true: colors.brand, false: colors.border }}
               {...switchThumb}
               accessibilityLabel={`${r.time} ${r.action === 'ON' ? c.ruleOn : c.ruleOff}`}
             />
-            <Pressable onPress={() => m.remove.mutate(r.id)} disabled={busy} hitSlop={8} accessibilityRole="button" accessibilityLabel={c.remove}>
+            <Pressable onPress={guard(() => m.remove.mutate(r.id))} disabled={busy} hitSlop={8} accessibilityRole="button" accessibilityLabel={c.remove}>
               <Icon name="trash-2" size={18} color={colors.textFaint} />
             </Pressable>
           </View>
@@ -195,8 +200,8 @@ export function ScheduleCard({ deviceId, automatic, lastSync }: { deviceId: stri
         </View>
       ) : (
         <View style={{ gap: space(2) }}>
-          <Button title={c.addRule} icon="plus" variant="secondary" onPress={() => setAdding(true)} disabled={busy} />
-          {rules.length === 0 && <Button title={c.nightPreset} icon="moon" variant="secondary" onPress={() => void nightPreset()} disabled={busy} />}
+          <Button title={c.addRule} icon="plus" variant="secondary" onPress={guard(() => setAdding(true))} disabled={busy} />
+          {rules.length === 0 && <Button title={c.nightPreset} icon="moon" variant="secondary" onPress={guard(() => void nightPreset())} disabled={busy} />}
         </View>
       )}
       {(m.create.error || m.update.error || m.remove.error) && (
