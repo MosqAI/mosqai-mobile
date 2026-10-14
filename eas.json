@@ -1,0 +1,21 @@
+{
+  "cli": {
+    "version": ">= 24.0.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://mosqai-api.onrender.com",
+        "EXPO_PUBLIC_WS_URL": "wss://mosqai-api.onrender.com"
+      }
+    },
+    "production": {
+      "autoIncrement": true
+    }
+  }
+}
