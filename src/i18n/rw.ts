@@ -22,6 +22,7 @@ const rw: Dict = {
     underDevText: 'Iki gice kiracyakorwaho. Ubu, koresha umutego wawe n’intoki ukoresheje switch yawo.',
   },
   auth: {
+    installTip: 'Inama: fungura menu ya mushakisha (⋮) ukande “Add to Home screen” kugira ngo ukoreshe MosqAI Shield nka porogaramu.',
     tagline: "Igenzura rikoresha ubwenge. Imiryango ifite ubuzima bwiza.",
     email: 'Imeyili',
     password: "Ijambo ry'ibanga",
@@ -257,6 +258,11 @@ const rw: Dict = {
     },
   },
   add: {
+    stepsTitle: 'Uko wahuza umutego wawe',
+    step1: 'Cana umutego wawe uwushyire aho imibu iba.',
+    step2: 'Shaka akarango kari ku mutego: kariho ID y’igikoresho (urugero MSQ-026) n’umubare wo guhuza.',
+    step3: 'Kanda “Andika kode” wandike byombi. Umutego uhita ugaragara mu bikoresho byawe.',
+    enterCode: 'Andika kode',
     title: 'Ongeramo igikoresho',
     manualTitle: 'Gushyiramo n’intoki',
     intro: 'Huza igikoresho cyawe na interineti kandi urebe ko gicanye.',

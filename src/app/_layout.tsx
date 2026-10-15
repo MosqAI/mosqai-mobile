@@ -10,10 +10,14 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NoticeProvider } from '@/components/notice';
 import { SplashView } from '@/components/splash';
 import { I18nProvider } from '@/i18n';
+import { API_URL } from '@/lib/api';
 import { AuthProvider, useAuth } from '@/lib/auth';
 import { colors } from '@/lib/theme';
 
 void SplashScreen.preventAutoHideAsync();
+
+// The free-plan backend sleeps when idle; start waking it while the app and fonts load.
+void fetch(`${API_URL}/health`).catch(() => {});
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 30_000, retry: 1 } },

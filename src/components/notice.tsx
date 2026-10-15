@@ -74,7 +74,7 @@ export function useNotice() {
 const styles = StyleSheet.create({
   scrim: { flex: 1, backgroundColor: 'rgba(36, 21, 68, 0.45)', alignItems: 'center', justifyContent: 'center', padding: space(6) },
   sheet: { width: '100%', maxWidth: 380, backgroundColor: colors.card, borderRadius: radius.lg, padding: space(6), gap: space(3) },
-  badge: { alignSelf: 'center', width: 48, height: 48, borderRadius: 24, backgroundColor: colors.warningSoft, alignItems: 'center', justifyContent: 'center' },
+  badge: { alignSelf: 'center', width: 48, height: 48, borderRadius: radius.lg, backgroundColor: colors.warningSoft, alignItems: 'center', justifyContent: 'center' },
   center: { textAlign: 'center' },
   actions: { gap: space(2), marginTop: space(2) },
 });
