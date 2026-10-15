@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.brand,
     paddingHorizontal: space(4),
     paddingVertical: space(2.5),
-    borderRadius: radius.pill,
+    borderRadius: radius.md,
   },
   addText: { color: '#fff', fontFamily: fonts.semibold, fontWeight: '600', fontSize: 13 },
   device: { flexDirection: 'row', alignItems: 'center', gap: space(3) },

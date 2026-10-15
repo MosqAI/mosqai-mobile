@@ -21,6 +21,7 @@ const fr: Dict = {
     underDevText: "Cette fonctionnalité est encore en cours de développement. Pour l’instant, utilisez l’interrupteur de votre piège manuellement.",
   },
   auth: {
+    installTip: 'Astuce : ouvrez le menu du navigateur (⋮) et touchez « Ajouter à l’écran d’accueil » pour utiliser MosqAI Shield comme une application.',
     tagline: 'Surveillance intelligente. Communautés en meilleure santé.',
     email: 'E-mail',
     password: 'Mot de passe',
@@ -256,6 +257,11 @@ const fr: Dict = {
     },
   },
   add: {
+    stepsTitle: 'Comment associer votre piège',
+    step1: 'Allumez votre piège et placez-le là où se trouvent les moustiques.',
+    step2: 'Trouvez l’étiquette sur votre piège : elle indique l’ID de l’appareil (ex. MSQ-026) et un code d’association.',
+    step3: 'Touchez « Saisir le code » et entrez les deux. Le piège apparaît ensuite dans vos appareils.',
+    enterCode: 'Saisir le code',
     title: 'Ajouter un appareil',
     manualTitle: 'Configuration manuelle',
     intro: "Connectez votre appareil au réseau et vérifiez qu'il est allumé.",

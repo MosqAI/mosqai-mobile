@@ -6,7 +6,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Button, Card, Field, Header, Screen, text } from '@/components/ui';
 import { useI18n } from '@/i18n';
 import { useClaimDevice } from '@/lib/queries';
-import { colors, space } from '@/lib/theme';
+import { colors, fonts, radius, space } from '@/lib/theme';
 
 /**
  * Pairing. "Scan Device" needs a camera QR scanner (expo-camera, development
@@ -37,8 +37,8 @@ export default function AddDeviceScreen() {
         header={<Header title={t.add.title} back />}
         footer={
           <>
-            <Button title={t.add.scan} icon="maximize" onPress={() => notice.show({ title: t.add.scan, message: t.add.scanText, icon: 'tool' })} />
-            <Button title={t.add.manual} variant="secondary" onPress={() => setManual(true)} />
+            <Button title={t.add.enterCode} icon="key" onPress={() => setManual(true)} />
+            <Button title={t.add.scan} icon="maximize" variant="secondary" onPress={() => notice.show({ title: t.add.scan, message: t.add.scanText, icon: 'tool' })} />
           </>
         }
       >
@@ -50,8 +50,18 @@ export default function AddDeviceScreen() {
               <View style={styles.led} />
             </View>
           </View>
-          <Text style={[text.body, styles.copy]}>{t.add.intro}</Text>
         </View>
+        <Card style={{ gap: space(3) }}>
+          <Text style={text.h2}>{t.add.stepsTitle}</Text>
+          {[t.add.step1, t.add.step2, t.add.step3].map((step, i) => (
+            <View key={step} style={styles.step}>
+              <View style={styles.stepNo}>
+                <Text style={styles.stepNoText}>{i + 1}</Text>
+              </View>
+              <Text style={[text.body, { flex: 1 }]}>{step}</Text>
+            </View>
+          ))}
+        </Card>
       </Screen>
     );
   }
@@ -73,11 +83,14 @@ export default function AddDeviceScreen() {
 }
 
 const styles = StyleSheet.create({
-  hero: { alignItems: 'center', gap: space(6), paddingTop: space(14) },
+  hero: { alignItems: 'center', paddingTop: space(6) },
+  step: { flexDirection: 'row', gap: space(3), alignItems: 'flex-start' },
+  stepNo: { width: 24, height: 24, borderRadius: radius.sm, backgroundColor: colors.brandSoft, alignItems: 'center', justifyContent: 'center' },
+  stepNoText: { fontFamily: fonts.semibold, fontWeight: '600', fontSize: 12, color: colors.brand },
   halo: {
-    width: 200,
-    height: 200,
-    borderRadius: 100,
+    width: 160,
+    height: 160,
+    borderRadius: 80,
     backgroundColor: 'rgba(255,255,255,0.55)',
     borderWidth: 1,
     borderColor: colors.glassBorder,
@@ -95,5 +108,4 @@ const styles = StyleSheet.create({
   },
   deviceSlot: { width: 70, height: 6, borderRadius: 3, backgroundColor: 'rgba(148,163,184,0.4)' },
   led: { width: 8, height: 8, borderRadius: 4, backgroundColor: colors.brand },
-  copy: { textAlign: 'center', color: colors.textMuted, maxWidth: 290 },
 });

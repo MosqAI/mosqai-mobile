@@ -1,7 +1,7 @@
 import { Link } from 'expo-router';
 import { useNotice } from '@/components/notice';
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text } from 'react-native';
 import { AuthShell } from '@/components/auth-shell';
 import { Button, Field } from '@/components/ui';
 import { useI18n } from '@/i18n';
@@ -67,6 +67,8 @@ export default function LoginScreen() {
       <Pressable onPress={() => notice.show({ title: t.auth.forgot, message: t.auth.forgotText, icon: 'tool' })} style={styles.forgot} accessibilityRole="button">
         <Text style={styles.link}>{t.auth.forgot}</Text>
       </Pressable>
+      {/* The web build is how most owners get the app today */}
+      {Platform.OS === 'web' && <Text style={styles.tip}>{t.auth.installTip}</Text>}
     </AuthShell>
   );
 }
@@ -75,4 +77,5 @@ const styles = StyleSheet.create({
   footer: { fontSize: 14, color: colors.textMuted },
   link: { color: colors.brand, fontFamily: fonts.semibold, fontWeight: '600', fontSize: 14 },
   forgot: { alignSelf: 'center', paddingVertical: 4 },
+  tip: { fontSize: 12, lineHeight: 17, color: colors.textMuted, textAlign: 'center' },
 });

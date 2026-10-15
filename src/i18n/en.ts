@@ -21,6 +21,7 @@ const en = {
     underDevText: 'This feature is still under development. For now, please operate your trap manually using its own switch.',
   },
   auth: {
+    installTip: 'Tip: open your browser menu (⋮) and tap “Add to Home screen” to use MosqAI Shield like an app.',
     tagline: 'Smarter Monitoring. Healthier Communities.',
     email: 'Email',
     password: 'Password',
@@ -256,6 +257,11 @@ const en = {
     },
   },
   add: {
+    stepsTitle: 'How to link your trap',
+    step1: 'Switch your trap on and place it where mosquitoes gather.',
+    step2: 'Find the label on your trap: it shows the Device ID (e.g. MSQ-026) and a pairing code.',
+    step3: 'Tap “Enter code” and type both in. The trap then appears in your Devices.',
+    enterCode: 'Enter code',
     title: 'Add Device',
     manualTitle: 'Manual Setup',
     intro: "Connect your mosquito device to the network and make sure it's on.",

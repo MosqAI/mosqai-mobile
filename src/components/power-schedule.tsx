@@ -213,7 +213,7 @@ export function ScheduleCard({ deviceId, automatic, lastSync }: { deviceId: stri
 
 const styles = StyleSheet.create({
   power: { flexDirection: 'row', alignItems: 'center', gap: space(4) },
-  powerButton: { width: 60, height: 60, borderRadius: 30, alignItems: 'center', justifyContent: 'center', borderWidth: 1 },
+  powerButton: { width: 60, height: 60, borderRadius: radius.lg, alignItems: 'center', justifyContent: 'center', borderWidth: 1 },
   powerOn: { backgroundColor: colors.brandSoft, borderColor: colors.brand },
   powerOff: { backgroundColor: colors.card, borderColor: colors.border },
   head: { flexDirection: 'row', alignItems: 'center', gap: space(2) },
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     width: 110,
   },
   days: { flexDirection: 'row', flexWrap: 'wrap', gap: space(1.5) },
-  day: { minWidth: 40, paddingHorizontal: space(2), paddingVertical: space(1.5), borderRadius: radius.pill, alignItems: 'center', backgroundColor: colors.glassStrong, borderWidth: 1, borderColor: colors.glassBorder },
+  day: { minWidth: 40, paddingHorizontal: space(2), paddingVertical: space(1.5), borderRadius: radius.md, alignItems: 'center', backgroundColor: colors.glassStrong, borderWidth: 1, borderColor: colors.glassBorder },
   dayActive: { backgroundColor: colors.brand, borderColor: colors.brand },
   dayText: { fontSize: 12, fontFamily: fonts.semibold, fontWeight: '600', color: colors.textMuted },
   formActions: { flexDirection: 'row', gap: space(2) },
